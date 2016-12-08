@@ -5,7 +5,7 @@
 		"version"    : "1.0",
 		"description": "Run your game with the best performances inside Electron",
 		"author"     : "Armaldio",
-		"help url"   : "https://github.com/armaldio/c2-electron-plugin",
+		"help url"   : "https://github.com/C2Electron/c2-plugin",
 		"category"   : "General",
 		"type"       : "object",
 		"rotatable"  : false,
@@ -32,6 +32,25 @@
 ////////////////////////////////////////
 // Conditions
 
+/**
+ * NW.js
+ */
+
+AddStringParam("Path", "Enter a file path to test if exists.");
+AddCondition(6, cf_none, "Path exists", "File system", "Path <i>{0}</i> exists", "Test if a file exists on disk.", "PathExists");
+
+AddCondition(7, cf_trigger, "On file dropped", "File system", "On file dropped", "Triggered when the user drag-and-drops a file in to the window.", "OnFileDrop");
+
+AddCondition(8, cf_trigger, "On open dialog OK", "File dialogs", "On open dialog OK", "Triggered after a file chosen from an open dialog.", "OnOpenDlg");
+
+AddCondition(9, cf_trigger, "On folder dialog OK", "File dialogs", "On folder dialog OK", "Triggered after a folder chosen from a folder dialog.", "OnFolderDlg");
+
+AddCondition(10, cf_trigger, "On save dialog OK", "File dialogs", "On save dialog OK", "Triggered after a file chosen from a save dialog.", "OnSaveDlg");
+
+/**
+ * Custom
+ */
+
 AddStringParam("Tag", "The unique tag", "");
 AddCondition(0, cf_trigger, "On save success", "Save", "On save {0} success", "Trigger when a specific save action succeed", "OnSaveSuccess");
 
@@ -44,7 +63,7 @@ AddCondition(3, cf_trigger, "On read success", "Read", "On read {0} success", "T
 AddStringParam("Tag", "The unique tag", "");
 AddCondition(4, cf_trigger, "On read fail", "Read", "On read {0} fail", "Trigger when a specific read action fail to read", "OnReadFail");
 
-AddCondition(2, cf_none, "Is Electron", "Test", "If the platform is Electron", "Test if the game is running on electron", "IsElectron");
+AddCondition(2, cf_none, "Is Electron", "Tests", "If the platform is Electron", "Test if the game is running on electron", "IsElectron");
 
 AddStringParam("Path", "Path to loop through", '""');
 AddComboParamOption("Folders");
@@ -56,9 +75,116 @@ AddComboParamOption("Yes");
 AddComboParam("Recursive", "Wether the query is recursive or not (TODO)");
 AddCondition(5, cf_looping | cf_not_invertible, "For each file/folder", "For Each",
 	"For each <i>{1}</i> in <i>{0}</i> (recursively = {2})", "Repeat the event for each file/folder in path.", "ForEachFileFolder");
+
+
+AddCondition(11, cf_looping | cf_not_invertible, "For each dropped file", "Drop", "For each dropped file", "Repeat the event for each dropped file.", "ForEachDroppedFile");
 ////////////////////////////////////////
 // Actions
 
+/**
+ * NW.js
+ */
+
+AddStringParam("Existing file", "Enter the existing file path to be renamed.");
+AddStringParam("New name", "Enter the new file path to rename to.");
+AddAction(15, af_none, "Rename file", "File system", "Rename <i>{0}</i> to <i>{1}</i>", "Rename an existing file.", "RenameFile");
+
+AddStringParam("Path", "Enter the folder path to create.");
+AddAction(17, af_none, "Create folder", "File system", "Create folder <i>{0}</i>", "Create a new folder on disk.", "CreateFolder");
+
+AddStringParam("Path", "Enter the file path to append to.", "");
+AddStringParam("Contents", "Enter the text content to append to the file.");
+AddAction(18, af_none, "Append file", "File system", "Append <b>{1}</b> to file <i>{0}</i>", "Add some text to the end of a file.", "AppendFile");
+
+AddStringParam("Path", "Enter the folder path to list files from.");
+AddAction(19, af_none, "List files", "File system", "List files from <i>{0}</i>", "Load a list of files in a given folder. Use expressions after this action to get the count and file names.", "ListFiles");
+
+AddStringParam("Accept", "The file types to filter by. Leave empty to show all files, or e.g. \".txt\" or \".txt,.json\" or \"text/*\"");
+AddAction(20, af_none, "Show open dialog", "File dialogs", "Show open dialog (accept <i>{0}</i>)", "Show an open file dialog allowing the user to pick a file.", "ShowOpenDlg");
+
+AddAction(21, af_none, "Show folder dialog", "File dialogs", "Show folder dialog", "Show a folder picker dialog allowing the user to pick a folder.", "ShowFolderDlg");
+
+AddStringParam("Accept", "The file types to filter by. Leave empty to show all files, or e.g. \".txt\" or \".txt,.json\" or \"text/*\"");
+AddAction(22, af_none, "Show save dialog", "File dialogs", "Show save dialog (accept <i>{0}</i>)", "Show a save file dialog.", "ShowSaveDlg");
+
+AddStringParam("Path", "Enter the file path to copy.");
+AddStringParam("Destination", "Enter the file path to copy to.");
+AddAction(23, af_none, "Copy file", "File system", "Copy <i>{0}</i> to <i>{1}</i>", "Make an identical copy of a file.", "CopyFile");
+
+AddStringParam("Path", "Enter the file path to move.");
+AddStringParam("Destination", "Enter the file path to move to.");
+AddAction(24, af_none, "Move file", "File system", "Move <i>{0}</i> to <i>{1}</i>", "Copy a file then delete the original.", "MoveFile");
+
+
+AddStringParam("Path", "Enter the path of the file to execute. This can also include space-separated arguments. To execute a path with spaces in it, wrap in double-quotes (e.g. \"\"\"C:\\Program Files\\file.exe\"\"\").");
+AddStringParam("Parameters", "A semicolon separated list of arguments to pas to the file");
+AddAction(25, af_none, "Run file", "File system", "Run <i>{0}</i> <b>{1}</b>", "Run a file, such as executing another program.", "RunFile");
+
+AddNumberParam("X", "The X co-ordinate to move the window to on the screen.");
+AddNumberParam("Y", "The Y co-ordinate to move the window to on the screen.");
+AddComboParamOption("Yes");
+AddComboParamOption("No");
+AddComboParam("Animated", "Wether the change is animated or not (MacOS)", "Yes");
+AddAction(27, af_none, "Set Position", "Window", "Set window position to <i>{0</i>;<i>{1}</i>", "Set the position of the window on the screen.", "SetWindowPosition");
+
+AddNumberParam("Width", "The new width of the window.");
+AddNumberParam("Height", "The new height of the window.");
+AddComboParamOption("Yes");
+AddComboParamOption("No");
+AddComboParam("Animated", "Wether the change is animated or not (MacOS)", "Yes");
+AddAction(29, af_none, "Set Size", "Window", "Set window size to <i>{0}</i>;<i>{1}</i>", "Set the size of the window.", "SetWindowSize");
+
+AddStringParam("Title", "A string to display in the window title bar.");
+AddAction(30, af_none, "Set title", "Window", "Set window title to <i>{0}</i>", "Set the text appearing in the window title bar.", "SetWindowTitle");
+
+AddAction(31, af_none, "Minimize", "Window", "Minimize window", "Minimize the window.", "WindowMinimize");
+AddAction(32, af_none, "Maximize", "Window", "Maximize window", "Maximize the window.", "WindowMaximize");
+AddAction(33, af_none, "Unmaximize", "Window", "Unmaximize window", "Unmaximize the window (i.e. the reverse of maximizing).", "WindowUnmaximize");
+AddAction(34, af_none, "Restore", "Window", "Restore window", "Restore the window (i.e. show again after minimizing).", "WindowRestore");
+
+AddComboParamOption("Request attention");
+AddComboParamOption("Stop requesting attention");
+AddComboParam("Mode", "Whether to request attention or cancel a previous request for attention.");
+AddAction(35, af_none, "Request attention", "Window", "Window: {0}", "Start or stop requesting attention from the user, e.g. by flashing the title bar (depends on OS).", "WindowRequestAttention");
+
+AddNumberParam("Max width", "The maximum window width to set, in pixels.");
+AddNumberParam("Max height", "The maximum window height to set, in pixels.");
+AddAction(36, af_none, "Set maximum size", "Window", "Set window maximum size to <i>{0}</i> x <i>{1}</i>", "Set the maximum size of the window.", "WindowSetMaxSize");
+
+AddNumberParam("Min width", "The minimum window width to set, in pixels.");
+AddNumberParam("Min height", "The minimum window height to set, in pixels.");
+AddAction(37, af_none, "Set minimum size", "Window", "Set window minimum size to <i>{0}</i> x <i>{1}</i>", "Set the minimum size of the window.", "WindowSetMinSize");
+
+AddComboParamOption("not resizable");
+AddComboParamOption("resizable");
+AddComboParam("Mode", "Whether to enable or disable resizing on the window.");
+AddAction(38, af_none, "Set resizable", "Window", "Set window {0}", "Enable or disable resize controls on the window.", "WindowSetResizable");
+
+/**
+ * TODO https://github.com/electron/electron/blob/master/docs/api/browser-window.md#winsetalwaysontopflag-level
+ AddComboParamOption("");
+ AddComboParamOption("");
+ AddComboParam("Mode", "Whether to enable or disable the window always being on top.");
+ */
+AddComboParamOption("not always on top");
+AddComboParamOption("always on top");
+AddComboParam("Mode", "Whether to enable or disable the window always being on top.");
+AddAction(39, af_none, "Set always on top", "Window", "Set window {0}", "Enable or disable the window always being on top of other windows.", "WindowSetAlwaysOnTop");
+
+AddAction(40, af_none, "Show dev tools", "Window", "Show dev tools", "Display the web developer tools e.g. for Javascript debugging or inspecting console messages.", "ShowDevTools");
+
+AddStringParam("Text", "Enter the text to copy to the clipboard.");
+AddAction(41, af_none, "Set clipboard text", "Clipboard", "Set clipboard text to <i>{0}</i>", "Copy some text to the clipboard.", "SetClipboardText");
+
+AddAction(42, af_none, "Clear clipboard", "Clipboard", "Clear clipboard", "Clear the clipboard so nothing is copied.", "ClearClipboard");
+
+AddStringParam("URL", "The web address to open in a browser.");
+AddAction(43, af_none, "Open browser", "File system", "Open browser to URL <i>{0}</i>", "Open the default browser to a given URL.", "OpenBrowser");
+
+
+/**
+ * Custom
+ */
 AddAction(1, cf_none, "Exit", "App", "Close electron windows", "Close electron windows", "Exit");
 AddAction(2, cf_none, "Restart", "App", "Restart electron windows", "Restart electron windows", "Restart");
 AddAction(3, cf_none, "Focus", "App", "Focuses on the application’s first window", "focuses on the application’s first window", "Focus");
@@ -109,6 +235,42 @@ AddAction(13, cf_none, "Write synchronous", "Write", "Write {1} to {0} ({2})", "
 ////////////////////////////////////////
 // Expressions
 
+/**
+ * NW.js
+ */
+
+AddExpression(23, ef_return_string, "", "File system", "AppFolder", "Return the application's folder. Note it may not have write permission.");
+AddExpression(24, ef_return_string, "", "File system", "UserFolder", "Return the current user's folder.");
+
+AddStringParam("Path", "The file path to load.");
+AddExpression(25, ef_return_string, "", "File system", "ReadFile", "Return the text content of a file on disk.");
+
+AddStringParam("Path", "The file path to get the size of.");
+AddExpression(26, ef_return_number, "", "File system", "FileSize", "Return the size of a file on disk, in bytes.");
+
+AddExpression(27, ef_return_number, "", "File system", "ListCount", "Return the number of files after 'List files'.");
+
+AddNumberParam("Index", "Zero-based index of file to retrieve.");
+AddExpression(28, ef_return_string, "", "File system", "ListAt", "Return the filename at an index after 'List files'.");
+
+AddExpression(29, ef_return_string, "", "File system", "DroppedFileName", "Return the filename of a file dropped in to the window.");
+AddExpression(37, ef_return_string, "", "File system", "DroppedFileSize", "Return the size of a file dropped in to the window.");
+AddExpression(38, ef_return_string, "", "File system", "DroppedFilePath", "Return the full path of a file dropped in to the window.");
+
+AddExpression(30, ef_return_string, "", "File dialogs", "ChosenPath", "Return the chosen path after a file dialog.");
+
+AddExpression(31, ef_return_number, "", "Window", "WindowX", "The X position of the window on the screen.");
+AddExpression(32, ef_return_number, "", "Window", "WindowY", "The Y position of the window on the screen.");
+AddExpression(33, ef_return_number, "", "Window", "WindowWidth", "The width of the UI window in the operating system.");
+AddExpression(34, ef_return_number, "", "Window", "WindowHeight", "The height of the UI window in the operating system.");
+AddExpression(35, ef_return_string, "", "Window", "WindowTitle", "The current window title bar text.");
+
+AddExpression(36, ef_return_string, "", "Clipboard", "ClipboardText", "The current text copied to the clipboard, if any.");
+
+/**
+ * Custom
+ */
+
 AddExpression(0, ef_return_any, "Get app path", "App", "GetAppPath", "Returns the current application directory.");
 
 AddExpression(2, ef_return_any, "Get Locale", "App", "GetLocale", "Get locale based on the system");
@@ -118,7 +280,6 @@ AddExpression(4, ef_return_any, "Get OS homedir", "OS", "GetOSHomedir", "Returns
 AddExpression(5, ef_return_any, "Get OS hostname", "OS", "GetOSHostname", "Returns the hostname of the operating system");
 AddExpression(6, ef_return_any, "Get platform", "OS", "GetOSPlatform", "Returns the operating system platform");
 
-AddExpression(7, ef_return_any, "Get user's home path", "Path", "GetHomePath", "User’s home directory");
 AddExpression(8, ef_return_any, "Get appdata path", "Path", "GetAppDataPath", "%APPDATA% (Win), $XDG_CONFIG_HOME or ~/.config (linux), ~/Library/Application (Mac)");
 AddExpression(9, ef_return_any, "Get user data path", "Path", "GetUserDataPath", "By default it is the appData directory appended with your app’s name");
 AddExpression(10, ef_return_any, "Get current executable file path", "Path", "GetExePath", "The current executable file");
@@ -129,12 +290,12 @@ AddExpression(14, ef_return_any, "Get music path", "Path", "GetMusicPath", "User
 AddExpression(15, ef_return_any, "Get pictures path", "Path", "GetPicturesPath", "User’s picture directory");
 AddExpression(16, ef_return_any, "Get videos path", "Path", "GetVideoPath", "User’s video directory");
 AddExpression(17, ef_return_any, "Get temp path", "Path", "GetTempPath", "Temporary folder path");
-AddExpression(18, ef_return_any, "Get app path", "Path", "GetAppPathFolder", "Current App folder path");
 
 AddExpression(19, ef_return_any, "Last read sync data", "Read", "LastReadSync", "Get the last data synced readed");
 AddExpression(20, ef_return_any, "Last read async data", "Read", "LastReadAsync", "Get the last data asynced readed");
-AddExpression(21, ef_return_any, "File exists", "Files", "Exists", "Check if file/folder exixts");
+AddExpression(21, ef_return_any, "File exists", "Files", "Exists", "Check if file/folder exists");
 AddExpression(22, ef_return_any, "The current file/folder in the loop", "Files", "CurrentFileFolder", "The current file/folder in the loop");
+
 ////////////////////////////////////////
 ACESDone();
 
@@ -150,59 +311,44 @@ ACESDone();
 
 var property_list = [];
 
-// Called by IDE when a new object type is to be created
 function CreateIDEObjectType() {
 	return new IDEObjectType();
 }
 
-// Class representing an object type in the IDE
 function IDEObjectType() {
 	assert2(this instanceof arguments.callee, "Constructor called as a function");
 }
 
-// Called by IDE when a new object instance of this type is to be created
 IDEObjectType.prototype.CreateInstance = function (instance) {
 	return new IDEInstance(instance);
-}
+};
 
-// Class representing an individual instance of an object in the IDE
 function IDEInstance(instance, type) {
 	assert2(this instanceof arguments.callee, "Constructor called as a function");
 
-	// Save the constructor parameters
 	this.instance = instance;
 	this.type     = type;
 
-	// Set the default property values from the property table
 	this.properties = {};
 
 	for (var i = 0; i < property_list.length; i++)
 		this.properties[property_list[i].name] = property_list[i].initial_value;
-
-	// Plugin-specific variables
-	// this.myValue = 0...
 }
 
-// Called when inserted via Insert Object Dialog for the first time
 IDEInstance.prototype.OnInserted = function () {
-}
+};
 
-// Called when double clicked in layout
 IDEInstance.prototype.OnDoubleClicked = function () {
-}
+};
 
-// Called after a property has been changed in the properties bar
 IDEInstance.prototype.OnPropertyChanged = function (property_name) {
-}
+};
 
-// For rendered objects to load fonts or textures
 IDEInstance.prototype.OnRendererInit = function (renderer) {
-}
+};
 
-// Called to draw self in the editor if a layout object
 IDEInstance.prototype.Draw = function (renderer) {
-}
+};
 
-// For rendered objects to release fonts or textures
 IDEInstance.prototype.OnRendererReleased = function (renderer) {
-}
+};

@@ -7,6 +7,8 @@ var runningElectron     = false;
 var lastReadedSyncData  = "";
 var lastReadedAsyncData = "";
 var currentFileFolder   = "";
+var droppedFiles        = [];
+var currectDroppedFile  = "";
 
 
 function isElectron() {
@@ -26,6 +28,8 @@ if (isElectron()) {
 		process       = require('process'),
 		epath         = require("path"),
 		os            = require('os'),
+		child         = require('child_process').execFile,
+
 		shell         = electron.shell,
 		app           = electron.app,
 		remote        = electron.remote,
@@ -75,6 +79,26 @@ cr.plugins_.armaldio_electron = function (runtime) {
 
 	// called whenever an instance is created
 	instanceProto.onCreate = function () {
+		var self = this;
+		document.addEventListener('drop', function (e) {
+
+			e.preventDefault();
+			e.stopPropagation();
+			droppedFiles = e.dataTransfer.files;
+			self.runtime.trigger(cr.plugins_.armaldio_electron.prototype.cnds.OnFileDrop, self);
+
+			/*
+			 for (let f of e.dataTransfer.files) {
+			 console.log('File(s) you dragged here: ', f.path)
+			 }
+			 */
+			return false;
+		});
+
+		document.addEventListener('dragover', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+		});
 	};
 
 	instanceProto.saveToJSON = function () {
@@ -145,6 +169,10 @@ cr.plugins_.armaldio_electron = function (runtime) {
 		return runningElectron;
 	};
 
+	Cnds.prototype.OnFileDrop = function () {
+		return true;
+	};
+
 	//TODO recursive
 
 	function walkSync(currentDirPath, callback) {
@@ -167,6 +195,16 @@ cr.plugins_.armaldio_electron = function (runtime) {
 		var files = fs.readdirSync(path, 'utf8');
 		$.each(files, function (index, value) {
 			currentFileFolder = value;
+			current_event.retrigger();
+		})
+	};
+
+	Cnds.prototype.ForEachDroppedFile = function () {
+		var current_event = this.runtime.getCurrentEventStack().current_event;
+
+		$.each(droppedFiles, function (index, value) {
+			console.log("index", index, "value", value);
+			currectDroppedFile = value;
 			current_event.retrigger();
 		})
 	};
@@ -208,8 +246,7 @@ cr.plugins_.armaldio_electron = function (runtime) {
 					console.log("Error : ", err);
 				}
 			}
-			else
-			{
+			else {
 				console.log("Cannot overwrite file");
 			}
 		}
@@ -263,6 +300,15 @@ cr.plugins_.armaldio_electron = function (runtime) {
 		});
 	};
 
+	Acts.prototype.RunFile = function (path, args) {
+		var parameters     = args.split(";");
+
+		child(path, parameters, function (err, data) {
+			console.log(err);
+			console.log(data.toString());
+		});
+	};
+
 	Acts.prototype.Exit = function () {
 		browserWindow.close();
 	};
@@ -283,14 +329,58 @@ cr.plugins_.armaldio_electron = function (runtime) {
 		browserWindow.hide();
 	};
 
+	Acts.prototype.Minimize = function () {
+		browserWindow.minimize();
+	};
+
 	Acts.prototype.Maximize = function () {
-		browserWindow.Maximize();
+		browserWindow.maximize();
+	};
+
+	Acts.prototype.Unmaximize = function () {
+		browserWindow.unmaximize();
+	};
+
+	Acts.prototype.Restore = function () {
+		browserWindow.restore();
 	};
 
 	Acts.prototype.Fullscreen = function (b) {
-		console.log(b);
 		browserWindow.setFullScreen((b == 0));
 	};
+
+	Acts.prototype.SetWindowPosition = function (x, y, animate) {
+		browserWindow.setPosition(x, y, animate == 0);
+	};
+
+	Acts.prototype.SetWindowSize = function (width, heigth, animate) {
+		browserWindow.setSize(width, heigth, animate == 0);
+	};
+
+	Acts.prototype.SetWindowTitle = function (title) {
+		browserWindow.setTitle(title);
+	};
+
+	Acts.prototype.WindowSetResizable = function (resizable) {
+		browserWindow.setResizable(resizable == 0);
+	};
+
+	Acts.prototype.WindowSetMaxSize = function (width, height) {
+		browserWindow.setMinimumSize(width, height);
+	};
+
+	Acts.prototype.WindowSetMinSize = function (width, height) {
+		browserWindow.setMaximumSize(width, height);
+	};
+
+	Acts.prototype.WindowSetAlwaysOnTop = function (top) {
+		browserWindow.setAlwaysOnTop(top == 0);
+	};
+
+	Acts.prototype.WindowRequestAttention = function (flash) {
+		browserWindow.flashFrame(flash == 0);
+	};
+
 
 	pluginProto.acts = new Acts();
 
@@ -299,6 +389,102 @@ cr.plugins_.armaldio_electron = function (runtime) {
 	// ret.set_float, ret.set_string, ret.set_any
 	function Exps() {
 	};
+
+	/**
+	 * NW.js
+	 */
+	Exps.prototype.AppFolder = function (ret) {
+		ret.set_string(__dirname);
+	};
+
+	Exps.prototype.UserFolder = function (ret) {
+		ret.set_string(remoteapp.getPath("home"));
+	};
+
+	Exps.prototype.ReadFile = function (ret) {
+		ret.set_any(lastReadedSyncData);
+	};
+
+	//------------------------------------------------------------------------------------------------------------------
+	Exps.prototype.FileSize = function (ret, path_) {
+		if (!isNWjs) {
+			ret.set_int(0);
+			return;
+		}
+
+		var size = 0;
+
+		try {
+			var stat = fs["statSync"](path_);
+			if (stat)
+				size = stat["size"] || 0;
+		}
+		catch (e) {
+		}
+
+		ret.set_int(size);
+	};
+
+	//------------------------------------------------------------------------------------------------------------------
+	Exps.prototype.ListCount = function (ret) {
+		ret.set_int(filelist.length);
+	};
+
+	//------------------------------------------------------------------------------------------------------------------
+	Exps.prototype.ListAt = function (ret, index) {
+		index = Math.floor(index);
+
+		if (index < 0 || index >= filelist.length)
+			ret.set_string("");
+		else
+			ret.set_string(filelist[index]);
+	};
+
+	Exps.prototype.DroppedFileName = function (ret) {
+		ret.set_string(currectDroppedFile.name);
+	};
+
+	Exps.prototype.DroppedFileSize = function (ret) {
+		ret.set_string(currectDroppedFile.size);
+	};
+
+	Exps.prototype.DroppedFilePath = function (ret) {
+		ret.set_string(currectDroppedFile.path);
+	};
+
+	//------------------------------------------------------------------------------------------------------------------
+	Exps.prototype.ChosenPath = function (ret) {
+		ret.set_string(chosenpath);
+	};
+
+	Exps.prototype.WindowX = function (ret) {
+		ret.set_int(browserWindow.getBounds().x);
+	};
+
+	Exps.prototype.WindowY = function (ret) {
+		ret.set_int(browserWindow.getBounds().y);
+	};
+
+	Exps.prototype.WindowWidth = function (ret) {
+		ret.set_int(browserWindow.getBounds().width);
+	};
+
+	Exps.prototype.WindowHeight = function (ret) {
+		ret.set_int(browserWindow.getBounds().height);
+	};
+
+	Exps.prototype.WindowTitle = function (ret) {
+		ret.set_string(browserWindow.getTitle());
+	};
+
+	//------------------------------------------------------------------------------------------------------------------
+	Exps.prototype.ClipboardText = function (ret) {
+		ret.set_string((isNWjs && gui) ? (gui["Clipboard"]["get"]()["get"]() || "") : 0);
+	};
+
+	/**
+	 * Custom
+	 */
 
 	Exps.prototype.GetAppPath = function (ret) {
 		ret.set_string(remoteapp.getAppPath());
@@ -322,10 +508,6 @@ cr.plugins_.armaldio_electron = function (runtime) {
 
 	Exps.prototype.GetOSPlatform = function (ret) {
 		ret.set_string(os.platform());
-	};
-
-	Exps.prototype.GetHomePath = function (ret) {
-		ret.set_string(remoteapp.getPath("home"));
 	};
 
 	Exps.prototype.GetAppDataPath = function (ret) {
@@ -366,14 +548,6 @@ cr.plugins_.armaldio_electron = function (runtime) {
 
 	Exps.prototype.GetTempPath = function (ret) {
 		ret.set_string(remoteapp.getPath("temp"));
-	};
-
-	Exps.prototype.GetAppPathFolder = function (ret) {
-		ret.set_string(__dirname);
-	};
-
-	Exps.prototype.LastReadSync = function (ret) {
-		ret.set_any(lastReadedSyncData);
 	};
 
 	Exps.prototype.LastReadAsync = function (ret) {
