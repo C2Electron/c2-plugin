@@ -295,7 +295,7 @@ AddExpression(19, ef_return_any, "Last read sync data", "Read", "LastReadSync", 
 AddExpression(20, ef_return_any, "Last read async data", "Read", "LastReadAsync", "Get the last data asynced readed");
 AddExpression(21, ef_return_any, "File exists", "Files", "Exists", "Check if file/folder exists");
 AddExpression(22, ef_return_any, "The current file/folder in the loop", "Files", "CurrentFileFolder", "The current file/folder in the loop");
-AddExpression(23, ef_return_any, "The current file/folder in the loop opened by 'open' modal", "Files", "CurrentOpenedFileFolder", "The current file/folder in the loop opened by 'open' modal");
+AddExpression(40, ef_return_any, "The current file/folder in the loop opened by 'open' modal", "Files", "CurrentOpenedFileFolder", "The current file/folder in the loop opened by 'open' modal");
 
 ////////////////////////////////////////
 ACESDone();
