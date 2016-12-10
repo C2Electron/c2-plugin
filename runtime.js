@@ -11,12 +11,17 @@ var droppedFiles            = [];
 var currectDroppedFile      = "";
 var currentOpenedFileFolder = "";
 
+/////////////////////////////////////
+// Plugin class
+cr.plugins_.armaldio_electron = function (runtime) {
+	this.runtime = runtime;
+};
 
 function isElectron() {
 	if (typeof window !== 'undefined' && window.process && window.process.type === 'renderer') {
 		return true;
 	}
-	if (typeof process !== 'undefined' && process.versions && !!process.versions.electron) {
+	if (typeof process !== 'undefined' && process.versions && process.versions.electron) {
 		return true;
 	}
 	return false;
@@ -42,20 +47,14 @@ if (isElectron()) {
 		clipboard     = electron.clipboard;
 
 	runningElectron = true;
-
 	console.log("Electron loaded");
 }
 
 var $ = jQuery;
-
-/////////////////////////////////////
-// Plugin class
-cr.plugins_.armaldio_electron = function (runtime) {
-	this.runtime = runtime;
-};
+global.args = process.argv;
+global.electron = true;
 
 (function () {
-
 		var pluginProto = cr.plugins_.armaldio_electron.prototype;
 
 		/////////////////////////////////////
