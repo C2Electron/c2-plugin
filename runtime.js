@@ -10,6 +10,9 @@ var currentFileFolder       = "";
 var droppedFiles            = [];
 var currectDroppedFile      = "";
 var currentOpenedFileFolder = "";
+var filesFolders            = [];
+var chosenpath              = "";
+var currentArg              = "";
 
 /////////////////////////////////////
 // Plugin class
@@ -47,12 +50,10 @@ if (isElectron()) {
 		clipboard     = electron.clipboard;
 
 	runningElectron = true;
-	console.log("Electron loaded");
+	var args        = require('electron').remote.getGlobal('args');
 }
 
 var $ = jQuery;
-global.args = process.argv;
-global.electron = true;
 
 (function () {
 		var pluginProto = cr.plugins_.armaldio_electron.prototype;
@@ -101,6 +102,19 @@ global.electron = true;
 			document.addEventListener('dragover', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
+				self.runtime.trigger(cr.plugins_.armaldio_electron.prototype.cnds.OnDragOver, self);
+			});
+
+			document.addEventListener('dragenter', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				self.runtime.trigger(cr.plugins_.armaldio_electron.prototype.cnds.OnDragEnter, self);
+			});
+
+			document.addEventListener('dragleave', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				self.runtime.trigger(cr.plugins_.armaldio_electron.prototype.cnds.OnDragLeave, self);
 			});
 		};
 
@@ -152,11 +166,11 @@ global.electron = true;
 		/**
 		 * @return {boolean}
 		 */
-		Cnds.prototype.OnSaveSuccess = function (tag) {
+		Cnds.prototype.OnWriteSuccess = function (tag) {
 			return cr.equals_nocase(tag, this.tag);
 		};
 
-		Cnds.prototype.OnSaveFail = function (tag) {
+		Cnds.prototype.OnWriteFail = function (tag) {
 			return cr.equals_nocase(tag, this.tag);
 		};
 
@@ -192,6 +206,18 @@ global.electron = true;
 			return true;
 		};
 
+		Cnds.prototype.OnDragOver = function () {
+			return true;
+		};
+
+		Cnds.prototype.OnDragEnter = function () {
+			return true;
+		};
+
+		Cnds.prototype.OnDragLeave = function () {
+			return true;
+		};
+
 		//TODO recursive
 
 		function walkSync(currentDirPath, callback) {
@@ -222,18 +248,25 @@ global.electron = true;
 			var current_event = this.runtime.getCurrentEventStack().current_event;
 
 			$.each(droppedFiles, function (index, value) {
-				console.log("index", index, "value", value);
 				currectDroppedFile = value;
 				current_event.retrigger();
 			})
 		};
 
-		Cnds.prototype.ForEachOpenedFileFolder = function () {
+		Cnds.prototype.ForEachSelectedFileFolder = function () {
 			var current_event = this.runtime.getCurrentEventStack().current_event;
 
-			$.each(droppedFiles, function (index, value) {
-				console.log("index", index, "value", value);
-				currentOpenedFileFolder = value;
+			$.each(filesFolders, function (index, value) {
+				currentSelectedFileFolder = value;
+				current_event.retrigger();
+			})
+		};
+
+		Cnds.prototype.ForEachArgument = function () {
+			var current_event = this.runtime.getCurrentEventStack().current_event;
+
+			$.each(args, function (index, value) {
+				currentArg = value;
 				current_event.retrigger();
 			})
 		};
@@ -251,9 +284,9 @@ global.electron = true;
 			self.tag = tag;
 			fs.writeFile(path, data, function (err) {
 				if (err) {
-					self.runtime.trigger(cr.plugins_.armaldio_electron.prototype.cnds.OnSaveFail, self);
+					self.runtime.trigger(cr.plugins_.armaldio_electron.prototype.cnds.OnWriteFail, self);
 				}
-				self.runtime.trigger(cr.plugins_.armaldio_electron.prototype.cnds.OnSaveSuccess, self);
+				self.runtime.trigger(cr.plugins_.armaldio_electron.prototype.cnds.OnWriteSuccess, self);
 			});
 		};
 
@@ -375,15 +408,6 @@ global.electron = true;
 			});
 		};
 
-		Acts.prototype.ReadSync = function (path) {
-			try {
-				lastReadedSyncData = fs.readFileSync(path, "utf8");
-				//self.runtime.trigger(cr.plugins_.armaldio_electron.prototype.cnds.OnReadSuccess, self);
-			} catch (err) {
-				console.log("Error : ", err);
-			}
-		};
-
 		Acts.prototype.DeleteSync = function (path) {
 			try {
 				fs.unlinkSync(path);
@@ -411,7 +435,12 @@ global.electron = true;
 				//filters:filters,
 				properties : properties.split(",")
 			}, function (files) {
+				console.log(files);
 				if (files.length > 0) {
+					filesFolders = files;
+					if (files.length === 1) {
+						chosenpath = files[0];
+					}
 					self.runtime.trigger(cr.plugins_.armaldio_electron.prototype.cnds.OnOpenDialogSuccess, self);
 				}
 				else {
@@ -547,17 +576,17 @@ global.electron = true;
 			ret.set_string(remoteapp.getPath("home"));
 		};
 
-		Exps.prototype.ReadFile = function (ret) {
-			ret.set_any(lastReadedSyncData);
+		Exps.prototype.ReadFile = function (ret, path, encoding) {
+			try {
+				lastReadedSyncData = fs.readFileSync(path, "utf8");
+				ret.set_any(lastReadedSyncData);
+			} catch (err) {
+				console.log("Error : ", err);
+			}
 		};
 
 //------------------------------------------------------------------------------------------------------------------
 		Exps.prototype.FileSize = function (ret, path_) {
-			if (!isNWjs) {
-				ret.set_int(0);
-				return;
-			}
-
 			var size = 0;
 
 			try {
@@ -598,7 +627,6 @@ global.electron = true;
 			ret.set_string(currectDroppedFile.path);
 		};
 
-//------------------------------------------------------------------------------------------------------------------
 		Exps.prototype.ChosenPath = function (ret) {
 			ret.set_string(chosenpath);
 		};
@@ -623,9 +651,8 @@ global.electron = true;
 			ret.set_string(browserWindow.getTitle());
 		};
 
-//------------------------------------------------------------------------------------------------------------------
 		Exps.prototype.ClipboardText = function (ret) {
-			ret.set_string((isNWjs && gui) ? (gui["Clipboard"]["get"]()["get"]() || "") : 0);
+			ret.set_string(clipboard.readText());
 		};
 
 		/**
@@ -717,8 +744,8 @@ global.electron = true;
 			ret.set_any(getFilesizeInBytes(path));
 		};
 
-//TODO
-		Exps.prototype.FileFolderCount = function (ret, type) {
+		//TODO
+		Exps.prototype.FileFolderCount = function (ret, path) {
 			var items = fs.readdirSync(path, 'utf8');
 			ret.set_any(items.length);
 		};
@@ -733,13 +760,11 @@ global.electron = true;
 			}
 		};
 
-		Exps.prototype.ClipboardText = function (ret, type) {
-			ret.set_any(clipboard.readText(type));
+		Exps.prototype.CurrentArg = function (ret) {
+			ret.set_any(currentArg);
 		};
 
 		pluginProto.exps = new Exps();
 
-	}
-	()
-)
-;
+	}()
+);
