@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c2project>
+    <name>Electron showcase</name>
+    <description></description>
+    <version>1.0.0.0</version>
+    <author></author>
+    <author-email></author-email>
+    <author-website>http://</author-website>
+    <app-id>com.mycompany.myapp</app-id>
+    <unique-id>hstf3bfmg8jo</unique-id>
+    <saved-with-version>22600</saved-with-version>
+    <used-plugins>
+        <plugin author="Scirra" id="Browser" version="1">Browser</plugin>
+        <plugin author="Scirra" id="Button" version="1">Button</plugin>
+        <plugin author="Scirra" id="List" version="1">List</plugin>
+        <plugin author="Scirra" id="Sprite" version="1">Sprite</plugin>
+        <plugin author="Scirra" id="Text" version="1">Text</plugin>
+        <plugin author="Scirra" id="TextBox" version="1">Text box</plugin>
+        <plugin author="Armaldio" id="armaldio_electron" version="1">Electron</plugin>
+    </used-plugins>
+    <used-behaviors />
+    <used-effects />
+    <configurations>
+        <configuration exporter-descname="HTML5" exporter-id="html5" name="HTML5" />
+    </configurations>
+    <window-size>
+        <width>1920</width>
+        <height>1080</height>
+    </window-size>
+    <pixel-rounding>0</pixel-rounding>
+    <preview-effects>1</preview-effects>
+    <first-layout>DragDrop</first-layout>
+    <use-loader-layout>0</use-loader-layout>
+    <configuration-settings>
+        <prop name="Clear background">Yes</prop>
+        <prop name="Downscaling">Medium quality</prop>
+        <prop name="Enable WebGL">On</prop>
+        <prop name="Fullscreen in browser">Letterbox scale</prop>
+        <prop name="Fullscreen scaling">High quality</prop>
+        <prop name="Loader style">Construct 2 splash</prop>
+        <prop name="Orientations">Any</prop>
+        <prop name="Pause on unfocus">No</prop>
+        <prop name="Physics engine">Box2D asm.js</prop>
+        <prop name="Preload sounds">Yes</prop>
+        <prop name="Preview browser">Custom</prop>
+        <prop name="Sampling">Linear</prop>
+        <prop name="Use high-DPI display">Yes</prop>
+    </configuration-settings>
+    <object-folder>
+        <object-folder name="Window">
+            <object-type name="height" sid="9827329005104998">
+                <plugin id="Text" />
+            </object-type>
+            <object-type name="setmaxsizebtn" sid="8910952611132497">
+                <plugin id="Button" />
+            </object-type>
+            <object-type name="setminsizebtn" sid="5755256542294617">
+                <plugin id="Button" />
+            </object-type>
+            <object-type name="setsizebtn" sid="571777079006733">
+                <plugin id="Button" />
+            </object-type>
+            <object-type name="windowHeightTb" sid="7736370066897147">
+                <plugin id="TextBox" />
+            </object-type>
+            <object-type name="windowMinHeightTb" sid="3221752608511066">
+                <plugin id="TextBox" />
+            </object-type>
+            <object-type name="windowMinWidthTb" sid="9063771295763337">
+                <plugin id="TextBox" />
+            </object-type>
+            <object-type name="windowMaxHeightTb" sid="6553897482359152">
+                <plugin id="TextBox" />
+            </object-type>
+            <object-type name="windowWidthTb" sid="8483507823154694">
+                <plugin id="TextBox" />
+            </object-type>
+            <object-type name="width" sid="1791387495087784">
+                <plugin id="Text" />
+            </object-type>
+            <object-type name="windowMaxWidthTb" sid="5917368508063072">
+                <plugin id="TextBox" />
+            </object-type>
+            <object-type name="toClipboard" sid="452354687431494">
+                <plugin id="Button" />
+            </object-type>
+            <object-type name="x" sid="4634444329444682">
+                <plugin id="Text" />
+            </object-type>
+            <object-type name="y" sid="7844766255282322">
+                <plugin id="Text" />
+            </object-type>
+            <object-type name="windowTitle" sid="5992083512794486">
+                <plugin id="Text" />
+            </object-type>
+            <object-type name="WindowLabels" sid="724309537844396">
+                <plugin id="Text" />
+            </object-type>
+            <object-type name="toClipboard2" sid="2242672245177903">
+                <plugin id="Button" />
+            </object-type>
+            <object-type name="tofiles" sid="2580473033378339">
+                <plugin id="Button" />
+            </object-type>
+        </object-folder>
+        <object-folder name="Clipboard">
+            <object-type name="clearClipboard" sid="488121914274963">
+                <plugin id="Button" />
+            </object-type>
+            <object-type name="clipboardLabels" sid="1556420081562102">
+                <plugin id="Text" />
+            </object-type>
+            <object-type name="clipboardText" sid="1264036859743255">
+                <plugin id="Text" />
+            </object-type>
+            <object-type name="clipBoardCopy" sid="25283718851343">
+                <plugin id="TextBox" />
+            </object-type>
+            <object-type name="clipboardTitle" sid="6294786478873153">
+                <plugin id="Text" />
+            </object-type>
+            <object-type name="setClipboard" sid="6887424310831373">
+                <plugin id="Button" />
+            </object-type>
+        </object-folder>
+        <object-folder name="DragDrop">
+            <object-type name="List" sid="7766239265723129">
+                <plugin id="List" />
+            </object-type>
+            <object-type name="DropHereSprite" sid="2777559618133402">
+                <plugin id="Sprite" />
+                <animation-folder>
+                    <animation framecount="2" loop="0" name="Default" pingpong="0" repeatcount="1" repeatto="0" sid="1526071205646813" speed="0">
+                        <frame duration="1" hotspotX="0.5" hotspotY="0.5" />
+                        <frame duration="1" hotspotX="0.5" hotspotY="0.5" />
+                    </animation>
+                </animation-folder>
+            </object-type>
+        </object-folder>
+        <object-folder name="Paths">
+            <object-type name="appdir" sid="8082679272856641">
+                <plugin id="Text" />
+            </object-type>
+            <object-type name="changeSavePath" sid="3726886476533047">
+                <plugin id="Button" />
+            </object-type>
+            <object-type name="DeleteFileSync" sid="3803177759447643">
+                <plugin id="Button" />
+            </object-type>
+            <object-type name="DeleteFileAsync" sid="5005323723953397">
+                <plugin id="Button" />
+            </object-type>
+            <object-type name="pathTosave" sid="6405385471715307">
+                <plugin id="Text" />
+            </object-type>
+            <object-type name="ReadFileAsync" sid="1987295921453717">
+                <plugin id="Button" />
+            </object-type>
+            <object-type name="ReadFileSync" sid="7828452003762301">
+                <plugin id="Button" />
+            </object-type>
+            <object-type name="saveAsyncSuccess" sid="649063904038439">
+                <plugin id="Text" />
+            </object-type>
+            <object-type name="saveSyncSuccess" sid="6327802060445083">
+                <plugin id="Text" />
+            </object-type>
+            <object-type name="tb_ReadAsync" sid="5400960242237409">
+                <plugin id="TextBox" />
+            </object-type>
+            <object-type name="tbReadSync" sid="5909635260343066">
+                <plugin id="TextBox" />
+            </object-type>
+            <object-type name="WriteFileAsync" sid="9308553232436085">
+                <plugin id="Button" />
+            </object-type>
+            <object-type name="writeFileSync" sid="9608832599002105">
+                <plugin id="Button" />
+            </object-type>
+            <object-type name="Text" sid="1025287253531875">
+                <plugin id="Text" />
+            </object-type>
+            <object-type name="Text2" sid="4928902661211691">
+                <plugin id="Text" />
+            </object-type>
+        </object-folder>
+        <object-type name="Text3" sid="8729919538505129">
+            <plugin id="Text" />
+        </object-type>
+        <object-type name="Browser" sid="1790062071762364">
+            <plugin id="Browser" />
+        </object-type>
+        <object-type name="Electron" sid="6149429755688187">
+            <plugin id="armaldio_electron" />
+        </object-type>
+    </object-folder>
+    <families />
+    <layout-folder>
+        <layout>Window.xml</layout>
+        <layout>Clipboard.xml</layout>
+        <layout>Files.xml</layout>
+        <layout>DragDrop.xml</layout>
+    </layout-folder>
+    <event-folder>
+        <event-sheet>Window.xml</event-sheet>
+        <event-sheet>Clipboard.xml</event-sheet>
+        <event-sheet>Files.xml</event-sheet>
+        <event-sheet>DragDrop.xml</event-sheet>
+    </event-folder>
+    <global-instances>
+        <global-instance type="Electron" uid="1" />
+        <global-instance type="Browser" uid="38" />
+    </global-instances>
+    <sounds-folder />
+    <music-folder />
+    <files-folder>
+        <file-folder name="Icons">
+            <file name="icon-16.png" />
+            <file name="icon-32.png" />
+            <file name="icon-114.png" />
+            <file name="icon-128.png" />
+            <file name="icon-256.png" />
+            <file name="loading-logo.png" />
+        </file-folder>
+    </files-folder>
+</c2project>

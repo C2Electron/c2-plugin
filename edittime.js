@@ -41,27 +41,26 @@ AddCondition(6, cf_none, "Path exists", "File system", "Path <i>{0}</i> exists",
 
 AddCondition(7, cf_trigger, "On file dropped", "File system", "On file dropped", "Triggered when the user drag-and-drops a file in to the window.", "OnFileDrop");
 
-AddCondition(8, cf_trigger, "On open dialog OK", "File dialogs", "On open dialog OK", "Triggered after a file chosen from an open dialog.", "OnOpenDlg");
-
-AddCondition(9, cf_trigger, "On folder dialog OK", "File dialogs", "On folder dialog OK", "Triggered after a folder chosen from a folder dialog.", "OnFolderDlg");
-
-AddCondition(10, cf_trigger, "On save dialog OK", "File dialogs", "On save dialog OK", "Triggered after a file chosen from a save dialog.", "OnSaveDlg");
+AddCondition(8, cf_trigger, "On open dialog OK", "File dialogs", "On open dialog OK", "Triggered after a file chosen from an open dialog.", "OnOpenDialogSuccess");
+AddCondition(9, cf_trigger, "On open dialog fail", "File dialogs", "On open dialog fail", "Triggered after a an error occured in the open dialog or when user cancel.", "OnOpenDialogFail");
+AddCondition(10, cf_trigger, "On save dialog OK", "File dialogs", "On save dialog OK", "Triggered after a file chosen from a save dialog.", "OnSaveDialogSuccess");
+AddCondition(12, cf_trigger, "On save dialog fail", "File dialogs", "On save dialog fail", "Triggered after a an error occured in the save dialog or when user cancel.", "OnSaveDialogFail");
 
 /**
  * Custom
  */
 
 AddStringParam("Tag", "The unique tag", "");
-AddCondition(0, cf_trigger, "On save success", "Save", "On save {0} success", "Trigger when a specific save action succeed", "OnSaveSuccess");
+AddCondition(0, cf_trigger, "On write success", "File system", "On write {0} success", "Trigger when a specific write action succeed", "OnWriteSuccess");
 
 AddStringParam("Tag", "The unique tag", "");
-AddCondition(1, cf_trigger, "On save fail", "Save", "On save {0} fail", "Trigger when a specific save action fail to save", "OnSaveFail");
+AddCondition(1, cf_trigger, "On write fail", "File system", "On write {0} fail", "Trigger when a specific write action fail to write", "OnWriteFail");
 
 AddStringParam("Tag", "The unique tag", "");
-AddCondition(3, cf_trigger, "On read success", "Read", "On read {0} success", "Trigger when a specific read action succeed", "OnReadSuccess");
+AddCondition(3, cf_trigger, "On read success", "File system", "On read {0} success", "Trigger when a specific read action succeed", "OnReadSuccess");
 
 AddStringParam("Tag", "The unique tag", "");
-AddCondition(4, cf_trigger, "On read fail", "Read", "On read {0} fail", "Trigger when a specific read action fail to read", "OnReadFail");
+AddCondition(4, cf_trigger, "On read fail", "File system", "On read {0} fail", "Trigger when a specific read action fail to read", "OnReadFail");
 
 AddCondition(2, cf_none, "Is Electron", "Tests", "If the platform is Electron", "Test if the game is running on electron", "IsElectron");
 
@@ -78,6 +77,12 @@ AddCondition(5, cf_looping | cf_not_invertible, "For each file/folder", "For Eac
 
 
 AddCondition(11, cf_looping | cf_not_invertible, "For each dropped file", "Drop", "For each dropped file", "Repeat the event for each dropped file.", "ForEachDroppedFile");
+AddCondition(13, cf_looping | cf_not_invertible, "For each selected file/folder", "Dialog", "For each selected file/folder", "Repeat the event for each selected file/folder", "ForEachSelectedFileFolder");
+AddCondition(14, cf_looping | cf_not_invertible, "For each application argument", "Startup", "For each application argument", "Repeat the event for each application argument", "ForEachArgument");
+
+AddCondition(15, cf_trigger, "OnDragOver", "Drag/Drop", "OnDragOver", "OnDragOver", "OnDragOver");
+AddCondition(16, cf_trigger, "OnDragEnter", "Drag/Drop", "OnDragEnter", "OnDragEnter", "OnDragEnter");
+AddCondition(17, cf_trigger, "OnDragLeave", "Drag/Drop", "OnDragLeave", "OnDragLeave", "OnDragLeave");
 ////////////////////////////////////////
 // Actions
 
@@ -99,13 +104,15 @@ AddAction(18, af_none, "Append file", "File system", "Append <b>{1}</b> to file 
 AddStringParam("Path", "Enter the folder path to list files from.");
 AddAction(19, af_none, "List files", "File system", "List files from <i>{0}</i>", "Load a list of files in a given folder. Use expressions after this action to get the count and file names.", "ListFiles");
 
-AddStringParam("Accept", "The file types to filter by. Leave empty to show all files, or e.g. \".txt\" or \".txt,.json\" or \"text/*\"");
-AddAction(20, af_none, "Show open dialog", "File dialogs", "Show open dialog (accept <i>{0}</i>)", "Show an open file dialog allowing the user to pick a file.", "ShowOpenDlg");
+AddStringParam("Title", "The title of the window", "");
+AddStringParam("Default path", "The preselected path", "");
+AddStringParam("Confirmation text (optional)", "The text of the Confirm button", "");
+AddStringParam("Filters (TODO)", "You can filter by filetype", "");
+AddStringParam("Properties", "openFile, openDirectory, multiSelections, createDirectory and showHiddenFiles (comma separated)", "");
+AddAction(20, af_none, "Show open dialog (file/folder)", "File dialogs", "Show open dialog (accept <i>{0}</i>)", "Show an open file dialog allowing the user to pick a file or a folder.", "ShowOpenDialog");
 
-AddAction(21, af_none, "Show folder dialog", "File dialogs", "Show folder dialog", "Show a folder picker dialog allowing the user to pick a folder.", "ShowFolderDlg");
-
 AddStringParam("Accept", "The file types to filter by. Leave empty to show all files, or e.g. \".txt\" or \".txt,.json\" or \"text/*\"");
-AddAction(22, af_none, "Show save dialog", "File dialogs", "Show save dialog (accept <i>{0}</i>)", "Show a save file dialog.", "ShowSaveDlg");
+AddAction(22, af_none, "Show save dialog", "File dialogs", "Show save dialog (accept <i>{0}</i>)", "Show a save file dialog.", "ShowSaveDialog");
 
 AddStringParam("Path", "Enter the file path to copy.");
 AddStringParam("Destination", "Enter the file path to copy to.");
@@ -197,13 +204,6 @@ AddComboParamOption("Not fullscreen");
 AddComboParam("State", "Fullscreen state", "Set fullscreen"); // a dropdown list parameter
 AddAction(8, cf_none, "Set Fullscreen", "App", "Set {0}", "Toggle fullscreen", "Fullscreen");
 
-AddStringParam("Title", "The title of the window", "");
-AddStringParam("Fefault path", "The preselected path", "");
-AddStringParam("Confirmation text (optional)", "The text of the Confirm button", "");
-AddStringParam("Filters (TODO)", "You can filter by filetype", "");
-AddStringParam("Properties", "openFile, openDirectory, multiSelections, createDirectory and showHiddenFiles (comma separated)", "");
-AddAction(6, cf_none, "Show open dialog", "Dialog", "Open a dialog to chose a file", "Open a dialog to chose a file", "ShowOpenDialog");
-
 AddStringParam("Tag", "A unique tag to keep track of the result", "");
 AddStringParam("Path", "The path of the file to write", "");
 AddStringParam("Data", "The data to write", "");
@@ -211,11 +211,8 @@ AddAction(0, cf_none, "Write asynchronous", "Write", "Write {2} to {1} ({0})", "
 
 AddStringParam("Tag", "A unique tag to keep track of the result", "");
 AddStringParam("Path", "The file to read", "");
-AddStringParam("Encoding", "The encoding of the file", "utf8");
+AddStringParam("Encoding", "The encoding of the file", "\"utf8\"");
 AddAction(9, cf_none, "Read file", "Read", "Read {1} ({0})", "Read a file asynchronously", "Read");
-
-AddStringParam("Path", "The path of the file to read", "");
-AddAction(10, cf_none, "Read synchronously a file", "Read", "Read {0}", "Read a file synchronously", "ReadSync");
 
 AddStringParam("Path", "The path of the file to read", "");
 AddAction(11, cf_none, "Delete synchronously a file", "Delete", "Delete {0}", "Delete a file synchronously", "DeleteSync");
@@ -225,12 +222,11 @@ AddAction(12, cf_none, "Create synchronously a file", "Create", "Create {0}", "C
 
 AddStringParam("Path", "The path of the file to write", "");
 AddStringParam("Data", "The data to write", "");
-AddStringParam("Encoding", "The encoding of the file", "utf8");
+AddStringParam("Encoding", "The encoding of the file", "\"utf8\"");
 AddComboParamOption("No");
 AddComboParamOption("Yes");
 AddComboParam("Overwrite", "Overwrite the file if it already exists", "No");
 AddAction(13, cf_none, "Write synchronous", "Write", "Write {1} to {0} ({2})", "Write data to a specific file synchronously", "WriteSync");
-
 
 ////////////////////////////////////////
 // Expressions
@@ -266,6 +262,7 @@ AddExpression(34, ef_return_number, "", "Window", "WindowHeight", "The height of
 AddExpression(35, ef_return_string, "", "Window", "WindowTitle", "The current window title bar text.");
 
 AddExpression(36, ef_return_string, "", "Clipboard", "ClipboardText", "The current text copied to the clipboard, if any.");
+AddExpression(20, ef_return_any, "Last read async data", "Read", "LastReadAsync", "Get the last data asynced readed");
 
 /**
  * Custom
@@ -291,11 +288,13 @@ AddExpression(15, ef_return_any, "Get pictures path", "Path", "GetPicturesPath",
 AddExpression(16, ef_return_any, "Get videos path", "Path", "GetVideoPath", "User’s video directory");
 AddExpression(17, ef_return_any, "Get temp path", "Path", "GetTempPath", "Temporary folder path");
 
-AddExpression(19, ef_return_any, "Last read sync data", "Read", "LastReadSync", "Get the last data synced readed");
-AddExpression(20, ef_return_any, "Last read async data", "Read", "LastReadAsync", "Get the last data asynced readed");
 AddExpression(21, ef_return_any, "File exists", "Files", "Exists", "Check if file/folder exists");
 AddExpression(22, ef_return_any, "The current file/folder in the loop", "Files", "CurrentFileFolder", "The current file/folder in the loop");
 AddExpression(40, ef_return_any, "The current file/folder in the loop opened by 'open' modal", "Files", "CurrentOpenedFileFolder", "The current file/folder in the loop opened by 'open' modal");
+AddExpression(41, ef_return_any, "The count of files/folders in a directory", "Files", "FileFolderCount", "The count of files/folders in a directory");
+AddExpression(42, ef_return_any, "The current argument", "Startup", "CurrentArg", "The current argument in the loop");
+
+
 
 ////////////////////////////////////////
 ACESDone();

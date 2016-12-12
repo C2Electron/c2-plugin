@@ -1,4 +1,4 @@
-# Created by .ignore support plugin (hsz.mobi)
 .idea/
-example.capx.autosave
-example.capx.backup1
+*.capx.autosave
+*.capx.backup1
+*.capx.tmp

@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c2eventsheet>
+    <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
+    <name>Files</name>
+    <events>
+        <event-block sid="9002761566718033">
+            <conditions>
+                <condition id="0" name="On clicked" sid="9810015850958117" type="changeSavePath" />
+            </conditions>
+            <actions>
+                <action id="20" name="Show open dialog (file/folder)" sid="1209630340253215" type="Electron">
+                    <param id="0" name="Title">&quot;Choose the saving path&quot;</param>
+                    <param id="1" name="Default path">&quot;&quot;</param>
+                    <param id="2" name="Confirmation text (optional)">&quot;Do it faggot&quot;</param>
+                    <param id="3" name="Filters (TODO)">&quot;&quot;</param>
+                    <param id="4" name="Properties">&quot;openDirectory&quot;</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="9303033524576369">
+            <conditions>
+                <condition id="8" name="On open dialog OK" sid="7305982175105801" type="Electron" />
+            </conditions>
+            <actions>
+                <action id="0" name="Set text" sid="1607283135862931" type="pathTosave">
+                    <param id="0" name="Text">Electron.ChosenPath</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-group description="" sid="3261888426110907" title="Async">
+            <sub-events>
+                <comment>save</comment>
+                <event-block sid="2331355374485573">
+                    <conditions>
+                        <condition id="0" name="On clicked" sid="175668859983933" type="WriteFileAsync" />
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Write asynchronous" sid="116238916315793" type="Electron">
+                            <param id="0" name="Tag">&quot;file&quot;</param>
+                            <param id="1" name="Path">pathTosave.Text &amp; &quot;/file.txt&quot;</param>
+                            <param id="2" name="Data">tb_ReadAsync.Text</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="4314622910961811">
+                    <conditions>
+                        <condition id="0" name="On write success" sid="5888682198848402" type="Electron">
+                            <param id="0" name="Tag">&quot;file&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Set text" sid="3514935123758274" type="saveAsyncSuccess">
+                            <param id="0" name="Text">&quot;saving done&quot;</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="4821629336161386">
+                    <conditions>
+                        <condition id="1" name="On write fail" sid="3991262848789464" type="Electron">
+                            <param id="0" name="Tag">&quot;file&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Set text" sid="1483287239924953" type="saveAsyncSuccess">
+                            <param id="0" name="Text">&quot;saving fail&quot;</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <comment>read</comment>
+                <event-block sid="3240857488951548">
+                    <conditions>
+                        <condition id="0" name="On clicked" sid="7992796864814574" type="ReadFileAsync" />
+                    </conditions>
+                    <actions>
+                        <action id="9" name="Read file" sid="4682946608220874" type="Electron">
+                            <param id="0" name="Tag">&quot;file&quot;</param>
+                            <param id="1" name="Path">pathTosave.Text &amp; &quot;/file.txt&quot;</param>
+                            <param id="2" name="Encoding">&quot;utf8&quot;</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="2063106413617496">
+                    <conditions>
+                        <condition id="3" name="On read success" sid="5798681272264823" type="Electron">
+                            <param id="0" name="Tag">&quot;file&quot;</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Set text" sid="1452887038575511" type="tb_ReadAsync">
+                            <param id="0" name="Text">Electron.LastReadAsync</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <comment>delete</comment>
+                <event-block sid="7519606431701448">
+                    <conditions>
+                        <condition id="0" name="On clicked" sid="6817548679329494" type="DeleteFileAsync" />
+                    </conditions>
+                    <actions />
+                </event-block>
+            </sub-events>
+        </event-group>
+        <event-group description="" sid="3536670232512957" title="Sync">
+            <sub-events>
+                <event-block sid="6974129816086397">
+                    <conditions>
+                        <condition id="0" name="On clicked" sid="5715939104233387" type="DeleteFileSync" />
+                    </conditions>
+                    <actions>
+                        <action id="11" name="Delete synchronously a file" sid="8986406720482465" type="Electron">
+                            <param id="0" name="Path">pathTosave.Text &amp; &quot;/file.txt&quot;</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="1532037949960028">
+                    <conditions>
+                        <condition id="0" name="On clicked" sid="9637445174934615" type="writeFileSync" />
+                    </conditions>
+                    <actions>
+                        <action id="13" name="Write synchronous" sid="3748049627421138" type="Electron">
+                            <param id="0" name="Path">pathTosave.Text &amp; &quot;/file.txt&quot;</param>
+                            <param id="1" name="Data">tbReadSync.Text</param>
+                            <param id="2" name="Encoding">&quot;utf8&quot;</param>
+                            <param id="3" name="Overwrite">1</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="3164026997589292">
+                    <conditions>
+                        <condition id="0" name="On clicked" sid="1220498521243269" type="ReadFileSync" />
+                    </conditions>
+                    <actions>
+                        <action id="0" name="Set text" sid="6712201832721118" type="tbReadSync">
+                            <param id="0" name="Text">Electron.ReadFile(pathTosave.Text &amp; &quot;/file.txt&quot;)</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-group>
+    </events>
+</c2eventsheet>

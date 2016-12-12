@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c2eventsheet>
+    <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
+    <name>Clipboard</name>
+    <events>
+        <event-block sid="7068462385668812">
+            <conditions>
+                <condition id="-6" name="Every X seconds" sid="7571899944177169" type="System">
+                    <param id="0" name="Interval (seconds)">0.5</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="0" name="Set text" sid="3955510121952303" type="clipboardText">
+                    <param id="0" name="Text">Electron.ClipboardText</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="1150478165181577">
+            <conditions>
+                <condition id="0" name="On clicked" sid="6147424506762127" type="setClipboard" />
+            </conditions>
+            <actions>
+                <action id="41" name="Set clipboard text" sid="7840520887382784" type="Electron">
+                    <param id="0" name="Text">&quot;Clipboard to this text&quot;</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="3865458344793133">
+            <conditions>
+                <condition id="0" name="On clicked" sid="2505651537247174" type="clearClipboard" />
+            </conditions>
+            <actions>
+                <action id="42" name="Clear clipboard" sid="6209108009217854" type="Electron" />
+            </actions>
+        </event-block>
+        <event-block sid="8997967943192285">
+            <conditions>
+                <condition id="0" name="On clicked" sid="1870824214432442" type="tofiles" />
+            </conditions>
+            <actions>
+                <action id="-2" name="Go to layout" sid="2388685929913344" type="System">
+                    <param id="0" name="Layout">Files</param>
+                </action>
+            </actions>
+        </event-block>
+    </events>
+</c2eventsheet>

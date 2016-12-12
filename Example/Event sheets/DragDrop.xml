@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c2eventsheet>
+    <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
+    <name>DragDrop</name>
+    <events>
+        <event-block sid="771078027607835">
+            <conditions>
+                <condition id="7" name="On file dropped" sid="4478918097016376" type="Electron" />
+            </conditions>
+            <actions />
+            <sub-events>
+                <event-block sid="7216299931379706">
+                    <conditions>
+                        <condition id="11" name="For each dropped file" sid="1550032925567184" type="Electron" />
+                    </conditions>
+                    <actions>
+                        <action id="7" name="Add item" sid="959281178097245" type="List">
+                            <param id="0" name="Text">Electron.DroppedFileName &amp; &quot; - &quot; &amp; Electron.DroppedFilePath  &amp; &quot; - &quot; &amp; Electron.DroppedFileSize</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-block>
+        <event-block sid="7250490439998963">
+            <conditions>
+                <condition id="15" name="OnDragOver" sid="1478067989376528" type="Electron" />
+            </conditions>
+            <actions>
+                <action id="5" name="Set frame" sid="4664358928284727" type="DropHereSprite">
+                    <param id="0" name="Frame number">1</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="5346050883276014">
+            <conditions>
+                <condition id="17" name="OnDragLeave" sid="8448080988701008" type="Electron" />
+            </conditions>
+            <actions>
+                <action id="5" name="Set frame" sid="7155230875399323" type="DropHereSprite">
+                    <param id="0" name="Frame number">0</param>
+                </action>
+            </actions>
+        </event-block>
+    </events>
+</c2eventsheet>

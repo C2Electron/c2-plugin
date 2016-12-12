@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c2eventsheet>
+    <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
+    <name>Window</name>
+    <events>
+        <event-block sid="127916669739621">
+            <conditions>
+                <condition id="-6" name="Every X seconds" sid="2078694177634668" type="System">
+                    <param id="0" name="Interval (seconds)">0.5</param>
+                </condition>
+            </conditions>
+            <actions>
+                <action id="0" name="Set text" sid="4908952064614421" type="Text3">
+                    <param id="0" name="Text">Electron.GetAppPath</param>
+                </action>
+                <action id="0" name="Set text" sid="9857348173129048" type="height">
+                    <param id="0" name="Text">&quot;Window Height : &quot; &amp; Electron.WindowHeight</param>
+                </action>
+                <action id="0" name="Set text" sid="1856388274205685" type="width">
+                    <param id="0" name="Text">&quot;Window Width : &quot; &amp; Electron.WindowWidth</param>
+                </action>
+                <action id="0" name="Set text" sid="511802669228989" type="x">
+                    <param id="0" name="Text">&quot;Window X position : &quot; &amp; Electron.WindowX</param>
+                </action>
+                <action id="0" name="Set text" sid="4412022154344562" type="y">
+                    <param id="0" name="Text">&quot;Window Y position : &quot; &amp; Electron.WindowY </param>
+                </action>
+                <action id="0" name="Set text" sid="7153809686119265" type="windowHeightTb">
+                    <param id="0" name="Text">str(Electron.WindowHeight)</param>
+                </action>
+                <action id="0" name="Set text" sid="3321923127066423" type="windowWidthTb">
+                    <param id="0" name="Text">str(Electron.WindowWidth)</param>
+                </action>
+                <action disabled="1" id="0" name="Set text" sid="5615744140638033" type="windowMaxHeightTb">
+                    <param id="0" name="Text">str(Electron.WindowHeight)</param>
+                </action>
+                <action disabled="1" id="0" name="Set text" sid="8999811911700089" type="windowMaxWidthTb">
+                    <param id="0" name="Text">str(Electron.WindowWidth)</param>
+                </action>
+                <action disabled="1" id="0" name="Set text" sid="4117886014544532" type="windowMinHeightTb">
+                    <param id="0" name="Text">str(Electron.WindowHeight)</param>
+                </action>
+                <action disabled="1" id="0" name="Set text" sid="1499848396864248" type="windowMinWidthTb">
+                    <param id="0" name="Text">str(Electron.WindowWidth)</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block disabled="1" sid="5509444032669857">
+            <conditions>
+                <condition id="7" name="On file dropped" sid="2003330853937206" type="Electron" />
+            </conditions>
+            <actions />
+            <sub-events>
+                <event-block disabled="1" sid="537112925318013">
+                    <conditions>
+                        <condition id="11" name="For each dropped file" sid="1804305377268878" type="Electron" />
+                    </conditions>
+                    <actions>
+                        <action id="7" name="Add item" sid="7910806185037486" type="List">
+                            <param id="0" name="Text">Electron.DroppedFileName &amp; &quot; - &quot; &amp; Electron.DroppedFileSize</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-block>
+        <event-block sid="29134890806138">
+            <conditions>
+                <condition id="0" name="On clicked" sid="7692571890680876" type="setsizebtn" />
+            </conditions>
+            <actions>
+                <action id="29" name="Set Size" sid="4458946098322125" type="Electron">
+                    <param id="0" name="Width">int(windowWidthTb.Text)</param>
+                    <param id="1" name="Height">int(windowHeightTb.Text)</param>
+                    <param id="2" name="Animated">0</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="9694011906221332">
+            <conditions>
+                <condition id="0" name="On clicked" sid="6267878377390843" type="setmaxsizebtn" />
+            </conditions>
+            <actions>
+                <action id="36" name="Set maximum size" sid="5394827320284706" type="Electron">
+                    <param id="0" name="Max width">int(windowMaxWidthTb.Text)</param>
+                    <param id="1" name="Max height">int(windowMaxWidthTb.Text)</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="4630624267481309">
+            <conditions>
+                <condition id="0" name="On clicked" sid="3886126814526051" type="setminsizebtn" />
+            </conditions>
+            <actions>
+                <action id="37" name="Set minimum size" sid="4755176106354172" type="Electron">
+                    <param id="0" name="Min width">int(windowMinWidthTb.Text)</param>
+                    <param id="1" name="Min height">int(windowMinHeightTb.Text)</param>
+                </action>
+            </actions>
+        </event-block>
+        <event-block sid="2882029401491341">
+            <conditions>
+                <condition id="0" name="On clicked" sid="1306225021989057" type="toClipboard" />
+            </conditions>
+            <actions>
+                <action id="-2" name="Go to layout" sid="3489291213231462" type="System">
+                    <param id="0" name="Layout">Clipboard</param>
+                </action>
+            </actions>
+        </event-block>
+    </events>
+</c2eventsheet>
