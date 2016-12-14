@@ -293,16 +293,18 @@ var $ = jQuery;
 		function ValidFilePath(path) {
 			return true
 		}
-
+	
 		Acts.prototype.WriteSync = function (path, data, encoding, overwrite) {
+			var encoding_mode_ = ['utf8', 'binary', 'base64'][encoding];
 			console.log(data);
+			console.log(encoding_mode_);
 			console.log(overwrite);
 			if (ValidFilePath(path)) {
 				if (overwrite) {
 					try {
-						if (encoding === "base64")
+						if (encoding_mode_ === "base64")
 							data = data.replace("data:image/png;base64,", "");
-						fs.writeFileSync(path, data, {'encoding': encoding});
+						fs.writeFileSync(path, data, {'encoding': encoding_mode_});
 						console.log("Wrote success");
 					} catch (err) {
 						console.log("Error : ", err);
