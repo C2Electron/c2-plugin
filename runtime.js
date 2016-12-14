@@ -280,6 +280,8 @@ var $ = jQuery;
 		};
 
 		Acts.prototype.Write = function (tag, path, data, encoding) {
+			var encoding_mode_ = ['utf8', 'binary', 'base64'][encoding];
+			console.log(encoding_mode_);
 			var self = this;
 			self.tag = tag;
 			fs.writeFile(path, data, function (err) {
