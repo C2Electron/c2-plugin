@@ -208,8 +208,8 @@ AddStringParam("Tag", "A unique tag to keep track of the result", "");
 AddStringParam("Path", "The path of the file to write", "");
 AddStringParam("Data", "The data to write", "");
 AddComboParamOption("utf8");
-AddComboParamOption("Binary");
-AddComboParamOption("Base64");
+AddComboParamOption("binary");
+AddComboParamOption("base64");
 AddComboParam("Encoding Mode", "Encoding mode.");
 AddAction(0, cf_none, "Write asynchronous", "Write", "Write {2} to {1} ({0})", "Write data to a specific file asynchronously", "Write");
 
@@ -227,9 +227,10 @@ AddAction(12, cf_none, "Create synchronously a file", "Create", "Create {0}", "C
 AddStringParam("Path", "The path of the file to write", "");
 AddStringParam("Data", "The data to write", "");
 AddComboParamOption("utf8");
-AddComboParamOption("Binary");
-AddComboParamOption("Base64");
-AddComboParam("Encoding Mode", "Encoding mode.");AddComboParamOption("No");
+AddComboParamOption("binary");
+AddComboParamOption("base64");
+AddComboParam("Encoding Mode", "Encoding mode.");
+AddComboParamOption("No");
 AddComboParamOption("Yes");
 AddComboParam("Overwrite", "Overwrite the file if it already exists", "No");
 AddAction(13, cf_none, "Write synchronous", "Write", "Write {1} to {0} ({2})", "Write data to a specific file synchronously", "WriteSync");
